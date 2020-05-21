@@ -4,7 +4,7 @@
 			<view class="u-steps-item" v-for="(item,index) in list" :key="index">
 				<view class="u-steps-item-num" v-if="mode == 'number' && current < index">{{index+1}}</view>
 				<view class="u-steps-item-dot" v-if="mode == 'dot'" :style="{backgroundColor: index <= current ? innerActiveColor : unActiveColor}"></view>
-				<u-icon size="22" class="u-steps-item-checked" :style="{backgroundColor: index <= current ? innerActiveColor : unActiveColor}"
+				<u-icon size="20" class="u-steps-item-checked" :style="{backgroundColor: index <= current ? innerActiveColor : unActiveColor}"
 				 v-if="mode == 'number' && current >= index" name="checkmark"></u-icon>
 				<text :style="{color: index <= current ? innerActiveColor : unActiveColor}">{{item.name}}</text>
 				<view class="u-steps-item-line" :style="{backgroundColor: index <= current ? innerActiveColor : unActiveColor, top: mode == 'dot' ? '24rpx' : '36rpx'}">
@@ -88,7 +88,7 @@
 		text-align: center;
 		position: relative;
 		min-width: 100rpx;
-		font-size: 26rpx;
+		font-size: 24rpx;
 		color: #8799a3;
 	}
 
@@ -110,8 +110,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 44rpx;
-		height: 44rpx;
+		width: 30rpx;
+		height: 30rpx;
 		border: 1px solid #8799a3;
 		border-radius: 50%;
 		margin: 14rpx auto;
@@ -130,9 +130,9 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 44rpx;
+		width: 30rpx;
 		color: #fff !important;
-		height: 44rpx;
+		height: 30rpx;
 		border-radius: 50%;
 		margin: 14rpx auto;
 		overflow: hidden;

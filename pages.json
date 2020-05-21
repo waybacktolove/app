@@ -27,7 +27,13 @@
 				"navigationBarTitleText": "uView-center"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/mbit/mbit",
+            "style" : {
+				"navigationBarTitleText": "MBTI测试题"
+			}
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uView",

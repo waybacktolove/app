@@ -127,6 +127,7 @@
 
 <style lang="scss" scoped>
 	.u-radio {
+		margin-bottom: 50rpx;
 		display: -webkit-flex;
 		display: flex;
 		-webkit-align-items: center;
@@ -139,6 +140,7 @@
 	.u-radio__icon-wrap,
 	.u-radio__label {
 		color: $u-content-color;
+		word-wrap: break-word;
 	}
 
 	.u-radio__icon-wrap {

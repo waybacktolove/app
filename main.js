@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import store from './store'
 // import store from '@/store'; 
-
+import api from './common/request.js'
 
 
 Vue.config.productionTip = false
@@ -24,7 +24,7 @@ App.mpType = 'app'
 // 引入全局uView
 import uView from 'uview-ui'
 Vue.use(uView);
-
+Vue.prototype.$api = api
 const app = new Vue({
 	store,
 	...App
