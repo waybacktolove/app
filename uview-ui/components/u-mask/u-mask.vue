@@ -82,6 +82,7 @@
 
 <style lang="scss" scoped>
 	.u-mask {
+		background:rgba(245,247,250,0.8)!important;
 		position: fixed;
 		top: 0;
 		left: 0;

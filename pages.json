@@ -4,9 +4,15 @@
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/login/index",
 			"style": {
-				"navigationBarTitleText": "问卷测试"
+				"navigationBarTitleText": "基本信息"
 			}
 		},
 		{
@@ -15,46 +21,22 @@
 				"navigationBarTitleText": "测试问卷"
 			}
 		},
+
 		{
-			"path": "pages/index/index",
+			"path": "pages/mbit/mbit",
 			"style": {
-				"navigationBarTitleText": "uView-index"
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "black"
 			}
-		},
-		{
-			"path": "pages/center/index",
-			"style": {
-				"navigationBarTitleText": "uView-center"
-			}
+		}, {
+			"path": "pages/result/result",
+			"style": {}
 		}
-	    ,{
-            "path" : "pages/mbit/mbit",
-            "style" : {
-				"navigationBarTitleText": "MBTI测试题"
-			}
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uView",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarBackgroundColor": "#ffffff",
 		"backgroundColor": "#F8F8F8"
-	},
-	"tabBar": {
-		"color": "#909399",
-		"selectedColor": "#303133",
-		"borderStyle": "black",
-		"backgroundColor": "#ffffff",
-		"list": [{
-			"pagePath": "pages/index/index",
-			"iconPath": "static/index.png",
-			"selectedIconPath": "static/index-selected.png",
-			"text": "首页"
-		}, {
-			"pagePath": "pages/center/index",
-			"iconPath": "static/center.png",
-			"selectedIconPath": "static/center-selected.png",
-			"text": "我"
-		}]
 	}
 }

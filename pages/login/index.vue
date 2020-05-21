@@ -1,11 +1,16 @@
-r
 <template>
 	<view class="content">
 		<view class="center_box">
 			<view class="header_icon">
-				<image src="../../static/icon/head_boy.png" :class="[sex == 1 ? 'sexClass' : '']" mode="" @click="chooseSex(1)"></image>
-				<text>-or-</text>
-				<image src="../../static/icon/head_girl.png" :class="[sex == 0 ? 'sexClass' : '']" mode="" @click="chooseSex(0)"></image>
+				<view class="header_box " :class="[sexsDefault === 2 ? '' : sex === 0 ? 'close' : '']">
+					<image v-if="sexsDefault !== 2 " class="swich"  src="../../static/switch.png" mode="widthFix"></image>
+					<image src="../../static/icon/head_boy.png" class="sexClass"  mode="" @click="chooseSex(1)"></image>
+				</view>
+				<text v-if="sexsDefault === 2 "  class="header_or">-or-</text>
+				<view class="header_box  " :class="[sexsDefault === 2 ? '' : sex === 1 ? 'close' :  '']">
+					<image v-if="sexsDefault !== 2 " class="swich"  src="../../static/switch.png" mode="widthFix"></image>
+					<image src="../../static/icon/head_girl.png"   mode="" @click="chooseSex(0)"></image>
+				</view>
 			</view>
 			<view class="form_area">
 				<text class="label_class">名字</text>
@@ -43,8 +48,9 @@ r
 				/>
 			</view>
 			<view class="btn_area">
-				<u-button shape="circle" :disabled="btnDisable" :plain="true" :ripple="true" ripple-bg-color="#BCD2EB" @click="confirm">开始测试</u-button>
+				<u-button shape="circle" :disabled="sex === 3 || name=== '' || school === '' || tel===''" type="primary" :ripple="true" ripple-bg-color="#BCD2EB" @click="confirm">开始测试</u-button>
 			</view>
+			<view class="text">注：参加测试的人员请务必诚实、独立的回答问题，只有 如此，才能得到有效的结果。</view>
 			<!-- toast提示 -->
 			<u-toast ref="uToast" />
 		</view>
@@ -56,17 +62,15 @@ import { mapState, mapMutations } from 'vuex';
 export default {
 	data() {
 		return {
-			sex: 1,
-			mobile: '',
+			sexsDefault:2,
+			sex: 3,
 			name: '',
 			school: '',
 			tel: '',
-
 			btnDisable: false,
 			errorName: '',
 			errorSchool: '',
 			errorTel: '',
-
 			/* 	errorName:'名字不能为空',
 			errorSchool:'学校不能为空',
 			errorTel:'电话不能为空', */
@@ -113,10 +117,10 @@ export default {
 		...mapMutations(['changeStatus', 'changeUserInfo']),
 		confirm() {
 			let data = {
-				sex: this.sex,
-				name: this.name,
+				gender: this.sex,
+				username: this.name,
 				school: this.school,
-				tel: this.tel
+				mobile: this.tel
 			};
 			// 直接存sessionStorage中
 			for (let key in data) {
@@ -127,13 +131,26 @@ export default {
 						type: 'warning',
 						position: 'top',
 						duration: 1500
-						// url: '/pages/user/index' //结束后跳转的页面路径
 					});
-					// return
+					return
 				}
 			}
-			console.log('不请求')
-			this.$goTo('/pages/test/index');
+			this.login(data)
+			// this.$goTo('/pages/mbit/mbit');
+		},
+		// 登录
+		login(data){
+			this.$api.request('user/register','POST',data,false,true,false).then(res=>{
+				console.log(res.data.userinfo)
+				uni.setStorage({
+				    key: 'userInfo',
+				    data: res.data.userinfo,
+				    success: function () {
+				        console.log('保存用户信息成功');
+				    }
+				});
+				this.$goTo('/pages/mbit/mbit');
+			})
 		},
 		inputFocus(index) {
 			console.log('获得焦点');
@@ -145,7 +162,12 @@ export default {
 		},
 		// 选择性别
 		chooseSex(index) {
-			//
+			if(this.sex === index){
+				this.sexsDefault = 2
+				this.sex = 3;
+				return
+			}
+			this.sexsDefault = index
 			this.sex = index;
 		}
 	}
@@ -158,7 +180,7 @@ export default {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	height: 100vh;
+	// height: 100vh;
 	box-sizing: border-box;
 	.center_box {
 		margin: 40rpx 40rpx;
@@ -173,17 +195,36 @@ export default {
 			height: 128rpx;
 			margin-bottom: 80rpx;
 			display: flex;
-			justify-content: space-around;
+			justify-content: center;
 			padding: 0 50rpx;
 			align-items: center;
-			image {
-				height: 100%;
+			.header_box{
+				height: 128rpx;
 				width: 128rpx;
-				border-radius: 50%;
+				transition: all 0.3s linear;
+				position: relative;
+				.swich{
+					position: absolute;
+					z-index: 50;
+					bottom: 0;
+					width: 34rpx;
+					height: 34rpx;
+					right: 0;
+				}
+				image {
+					height: 100%;
+					width: 128rpx;
+					border-radius: 50%;
+				}
 			}
-			.sexClass {
-				box-sizing: border-box;
-				border: 2px solid #2979ff;
+			.header_or{
+				margin: 0 40rpx;
+			}
+			
+			.close{
+				opacity: 0;
+				width: 0;
+				height: 0;
 			}
 		}
 	}
@@ -232,6 +273,11 @@ export default {
 		margin-top: 40rpx;
 		padding: 40rpx 0;
 		width: 100%;
+	}
+	.text{
+		font-size:22rpx;
+		font-weight:400;
+		color:rgba(102,102,102,1);
 	}
 }
 

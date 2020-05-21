@@ -6,7 +6,7 @@
 const tui = {
 	//接口地址
 	interfaceUrl: function() {
-		return 'http://49.233.15.235:3000/mock/11/test/'
+		return 'http://192.168.0.124:8080/index.php/api/'
 	},
 	toast: function(text, duration, success) {
 		uni.showToast({
@@ -15,34 +15,22 @@ const tui = {
 			duration: duration || 2000
 		})
 	},
-	modal: function(title, content, showCancel, callback, confirmColor, confirmText) {
-		uni.showModal({
-			title: '提示',
-			content: content,
-			showCancel: showCancel,
-			cancelColor: "#555",
-			confirmColor: confirmColor || "#5677fc",
-			confirmText: confirmText || "确定",
-			success(res) {
-				if (res.confirm) {
-					callback && callback(true)
-				} else {
-					callback && callback(false)
-				}
-			}
-		})
-	},
 	isAndroid: function() {
 		const res = uni.getSystemInfoSync();
 		console.log(res.platform.toLocaleLowerCase())
 		return res.platform.toLocaleLowerCase() == "android"
 	},
+	
 	constNum: function() {
 		let time = 0;
 		// #ifdef APP-PLUS
 		time = this.isAndroid() ? 300 : 0;
 		// #endif
 		return time
+	},
+	getToken:function(){
+		let token = uni.getStorageSync('userInfo') === null ? '' : uni.getStorageSync('userInfo').token;
+		return token
 	},
 	delayed: null,
 	/**
@@ -65,6 +53,7 @@ const tui = {
 		tui.delayed && uni.hideLoading();
 		clearTimeout(tui.delayed);
 		tui.delayed = null;
+		// tui.getToken();
 		if (!hideLoading) {
 			tui.delayed = setTimeout(() => {
 				uni.showLoading({
@@ -83,7 +72,7 @@ const tui = {
 				data: postData,
 				header: {
 					'content-type': isForm ? 'application/x-www-form-urlencoded' : 'application/json',
-					// 'Authorization': tui.getToken()
+					'HTTP_TOKEN': tui.getToken()
 				},
 				method: method, //'GET','POST'
 				dataType: 'json',
@@ -103,9 +92,9 @@ const tui = {
 					// 	})
 					// 	return
 					// }
-					if(res.data.errcode!==0){
+					if(res.data.code!==0){
 						uni.showToast({
-							title:res.data.errmsg,
+							title:res.data.msg,
 							icon:"none"
 						})
 					}else{

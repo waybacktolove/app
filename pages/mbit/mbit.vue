@@ -1,5 +1,6 @@
 <template>
 	<view class="mbit">
+		<u-navbar  :backIconSize="38" title="MBIT测试题"></u-navbar>
 		<view class="example-body"><uni-steps :options="list1" active-color="#00D1A0" :active="active" /></view>
 		<swiper :current="currentIndex - 1" @change="changeIndex" :duration="300">
 			<swiper-item v-for="(item, index) in list" :key="item.id">
@@ -7,7 +8,7 @@
 					<view class="test-title">{{ currentIndex }}.123144sdashdjkhsahdshadsqadasdsadsa</view>
 					<view class="list">
 						<view class="item" :class="value === index ? 'active' : ''" v-for="(item, index) in items" :key="item.name">
-							<image class="radio-img" src="../../static/center-selected.png" mode="widthFix"></image>
+							<image class="radio-img" :src="value === index ? '../../static/mbit/ac.png' : '../../static/mbit/d.png'" mode="widthFix"></image>
 							<view @tap="radioChange(index)" class="text">1111111111111111111111111111111123333333333333333333313213132145465446546546</view>
 						</view>
 					</view>
@@ -16,9 +17,9 @@
 		</swiper>
 		<!-- 底部操作 -->
 		<view class="action">
-			<image @tap="back()" v-show="currentIndex !== 1" class="action-btn" src="../../static/mbit/back.png" mode="widthFix"></image>
+			<image @tap="back()" :class="currentIndex !== 1 ? 'open' : 'close' " class="action-btn" src="../../static/mbit/back.png" mode="widthFix"></image>
 			<view v-show="currentIndex !== 1 && currentIndex !== list.length" class="center-box"></view>
-			<view class="" v-show="currentIndex !== list.length"><image @tap="next()" class="action-btn" src="../../static/mbit/next.png" mode="widthFix"></image></view>
+			<view class="action-btn"  :class="currentIndex !== list.length ? 'open' : 'close' "><image @tap="next()" class="action-btn" src="../../static/mbit/next.png" mode="widthFix"></image></view>
 		</view>
 		<!-- 弹窗 -->
 		<u-popup v-model="show" mode="center" length="90%" border-radius="42" :maskCloseAble = "false">
@@ -29,7 +30,7 @@
 					<text class="alert-time">5秒</text>
 					后自动跳转结果页
 				</view>
-				<u-button shape="circle" type="primary" class="alert-btn">查看结果</u-button>
+				<u-button shape="circle" type="primary" class="alert-btn" @tap="lookResult">查看结果</u-button>
 				<u-button shape="circle" type="default">继续-霍兰德职业兴趣测试</u-button>
 			</view>
 		</u-popup>
@@ -109,12 +110,19 @@ export default {
 		});
 	},
 	onLoad() {
-		this.$api.request('tests', 'POST', {}, false, false, false).then(res => {
+		let id = uni.getStorageSync('id')
+		this.$api.request('data/title', 'GET', {id:id}, false, false, false).then(res => {
 			let arr = res.data.list;
 			// this.list = arr.sort(() => Math.random() - 0.5);
 		});
 	},
 	methods: {
+		// 查看结果
+		lookResult(){
+			uni.navigateTo({
+				url:'../result/result'
+			})
+		},
 		radioGroupChange(e) {
 			console.log(e);
 			console.log(this.value);
@@ -251,6 +259,17 @@ uni-swiper {
 		width: 88rpx;
 		height: 88rpx;
 		border-radius: 50%;
+		transition: all 0.2s linear;
+	}
+	.close{
+		opacity: 0;
+		transform: translateY(40px);
+		width: 0;
+		height: 0;
+	}
+	.open{
+		opacity: 1;
+		transform: translateY(0px);
 	}
 }
 .alert {
