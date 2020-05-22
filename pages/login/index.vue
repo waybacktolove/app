@@ -3,13 +3,13 @@
 		<view class="center_box">
 			<view class="header_icon">
 				<view class="header_box " :class="[sexsDefault === 2 ? '' : sex === 0 ? 'close' : '']">
-					<image v-if="sexsDefault !== 2 " class="swich"  src="../../static/switch.png" mode="widthFix"></image>
-					<image src="../../static/icon/head_boy.png" class="sexClass"  mode="" @click="chooseSex(1)"></image>
+					<image v-if="sexsDefault !== 2" class="swich" src="../../static/switch.png" mode="widthFix"></image>
+					<image src="../../static/icon/head_boy.png" class="sexClass" mode="" @click="chooseSex(1)"></image>
 				</view>
-				<text v-if="sexsDefault === 2 "  class="header_or">-or-</text>
-				<view class="header_box  " :class="[sexsDefault === 2 ? '' : sex === 1 ? 'close' :  '']">
-					<image v-if="sexsDefault !== 2 " class="swich"  src="../../static/switch.png" mode="widthFix"></image>
-					<image src="../../static/icon/head_girl.png"   mode="" @click="chooseSex(0)"></image>
+				<text v-if="sexsDefault === 2" class="header_or">-or-</text>
+				<view class="header_box  " :class="[sexsDefault === 2 ? '' : sex === 1 ? 'close' : '']">
+					<image v-if="sexsDefault !== 2" class="swich" src="../../static/switch.png" mode="widthFix"></image>
+					<image src="../../static/icon/head_girl.png" mode="" @click="chooseSex(0)"></image>
 				</view>
 			</view>
 			<view class="form_area">
@@ -48,7 +48,16 @@
 				/>
 			</view>
 			<view class="btn_area">
-				<u-button shape="circle" :disabled="sex === 3 || name=== '' || school === '' || tel===''" type="primary" :ripple="true" ripple-bg-color="#BCD2EB" @click="confirm">开始测试</u-button>
+				<u-button
+					shape="circle"
+					:disabled="sex === 3 || name === '' || school === '' || tel === ''"
+					type="primary"
+					:ripple="true"
+					ripple-bg-color="#BCD2EB"
+					@click="confirm"
+				>
+					开始测试
+				</u-button>
 			</view>
 			<view class="text">注：参加测试的人员请务必诚实、独立的回答问题，只有 如此，才能得到有效的结果。</view>
 			<!-- toast提示 -->
@@ -62,7 +71,7 @@ import { mapState, mapMutations } from 'vuex';
 export default {
 	data() {
 		return {
-			sexsDefault:2,
+			sexsDefault: 2,
 			sex: 3,
 			name: '',
 			school: '',
@@ -132,25 +141,25 @@ export default {
 						position: 'top',
 						duration: 1500
 					});
-					return
+					return;
 				}
 			}
-			this.login(data)
+			this.login(data);
 			// this.$goTo('/pages/mbit/mbit');
 		},
 		// 登录
-		login(data){
-			this.$api.request('user/register','POST',data,false,true,false).then(res=>{
-				console.log(res.data.userinfo)
+		login(data) {
+			this.$api.request('user/register', 'POST', data, false, true, false).then(res => {
+				console.log(res.data.userinfo);
 				uni.setStorage({
-				    key: 'userInfo',
-				    data: res.data.userinfo,
-				    success: function () {
-				        console.log('保存用户信息成功');
-				    }
+					key: 'userInfo',
+					data: res.data.userinfo,
+					success: function() {
+						console.log('保存用户信息成功');
+					}
 				});
 				this.$goTo('/pages/mbit/mbit');
-			})
+			});
 		},
 		inputFocus(index) {
 			console.log('获得焦点');
@@ -162,12 +171,12 @@ export default {
 		},
 		// 选择性别
 		chooseSex(index) {
-			if(this.sex === index){
-				this.sexsDefault = 2
+			if (this.sex === index) {
+				this.sexsDefault = 2;
 				this.sex = 3;
-				return
+				return;
 			}
-			this.sexsDefault = index
+			this.sexsDefault = index;
 			this.sex = index;
 		}
 	}
@@ -198,12 +207,12 @@ export default {
 			justify-content: center;
 			padding: 0 50rpx;
 			align-items: center;
-			.header_box{
+			.header_box {
 				height: 128rpx;
 				width: 128rpx;
 				transition: all 0.3s linear;
 				position: relative;
-				.swich{
+				.swich {
 					position: absolute;
 					z-index: 50;
 					bottom: 0;
@@ -217,11 +226,11 @@ export default {
 					border-radius: 50%;
 				}
 			}
-			.header_or{
+			.header_or {
 				margin: 0 40rpx;
 			}
-			
-			.close{
+
+			.close {
 				opacity: 0;
 				width: 0;
 				height: 0;
@@ -274,10 +283,10 @@ export default {
 		padding: 40rpx 0;
 		width: 100%;
 	}
-	.text{
-		font-size:22rpx;
-		font-weight:400;
-		color:rgba(102,102,102,1);
+	.text {
+		font-size: 22rpx;
+		font-weight: 400;
+		color: rgba(102, 102, 102, 1);
 	}
 }
 

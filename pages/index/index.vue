@@ -3,7 +3,18 @@
 		<view class="head"><view class="head-nav">测试题库</view></view>
 		<view class="center">
 			<image class="center-img" src="../../static/head.png" mode="widthFix"></image>
-			<u-button v-for="(item,index) in list" :key="item.title" shape="circle" class="btn-boder" :type="index%2 === 0 ? 'primary' : 'default'" :ripple="true" ripple-bg-color="#BCD2EB" @tap="goUser(item.id)">{{item.title}}</u-button>
+			<u-button
+				v-for="(item, index) in list"
+				:key="item.title"
+				shape="circle"
+				class="btn-boder"
+				:type="index % 2 === 0 ? 'primary' : 'default'"
+				:ripple="true"
+				ripple-bg-color="#BCD2EB"
+				@tap="goUser(item.id)"
+			>
+				{{ item.title }}
+			</u-button>
 			<!-- <u-button shape="circle" :ripple="true" ripple-bg-color="#BCD2EB" @tap="goUser">霍兰德职业兴趣测试</u-button> -->
 		</view>
 		<view class="center-bottom">
@@ -33,14 +44,15 @@ export default {
 		},
 		goUser(id) {
 			uni.setStorage({
-				key:'id',
-				data:id
-			})
+				key: 'id',
+				data: id
+			});
 			this.$goTo('/pages/login/index');
 		}
 	}
 };
-</script> :ripple="true" ripple-bg-color="#BCD2EB" @tap="goUser">MBIT测试
+</script>
+:ripple="true" ripple-bg-color="#BCD2EB" @tap="goUser">MBIT测试
 
 <style lang="scss" scoped>
 .content {

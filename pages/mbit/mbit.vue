@@ -1,6 +1,6 @@
 <template>
 	<view class="mbit">
-		<u-navbar  :backIconSize="38" title="MBIT测试题"></u-navbar>
+		<u-navbar :backIconSize="38" title="MBIT测试题"></u-navbar>
 		<view class="example-body"><uni-steps :options="list1" active-color="#00D1A0" :active="active" /></view>
 		<swiper :current="currentIndex - 1" @change="changeIndex" :duration="300">
 			<swiper-item v-for="(item, index) in list" :key="item.id">
@@ -17,12 +17,14 @@
 		</swiper>
 		<!-- 底部操作 -->
 		<view class="action">
-			<image @tap="back()" :class="currentIndex !== 1 ? 'open' : 'close' " class="action-btn" src="../../static/mbit/back.png" mode="widthFix"></image>
+			<image @tap="back()" :class="currentIndex !== 1 ? 'open' : 'close'" class="action-btn" src="../../static/mbit/back.png" mode="widthFix"></image>
 			<view v-show="currentIndex !== 1 && currentIndex !== list.length" class="center-box"></view>
-			<view class="action-btn"  :class="currentIndex !== list.length ? 'open' : 'close' "><image @tap="next()" class="action-btn" src="../../static/mbit/next.png" mode="widthFix"></image></view>
+			<view class="action-btn" :class="currentIndex !== list.length ? 'open' : 'close'">
+				<image @tap="next()" class="action-btn" src="../../static/mbit/next.png" mode="widthFix"></image>
+			</view>
 		</view>
 		<!-- 弹窗 -->
-		<u-popup v-model="show" mode="center" length="90%" border-radius="42" :maskCloseAble = "false">
+		<u-popup v-model="show" mode="center" length="90%" border-radius="42" :maskCloseAble="false">
 			<view class="alert">
 				<view class="alert-title">恭喜您完成测试！</view>
 				<image class="alert-img" src="../../static/mbit/alert.png" mode="widthFix"></image>
@@ -110,18 +112,18 @@ export default {
 		});
 	},
 	onLoad() {
-		let id = uni.getStorageSync('id')
-		this.$api.request('data/title', 'GET', {id:id}, false, false, false).then(res => {
+		let id = uni.getStorageSync('id');
+		this.$api.request('data/title', 'GET', { id: id }, false, false, false).then(res => {
 			let arr = res.data.list;
 			// this.list = arr.sort(() => Math.random() - 0.5);
 		});
 	},
 	methods: {
 		// 查看结果
-		lookResult(){
+		lookResult() {
 			uni.navigateTo({
-				url:'../result/result'
-			})
+				url: '../result/result'
+			});
 		},
 		radioGroupChange(e) {
 			console.log(e);
@@ -134,9 +136,9 @@ export default {
 			// this.items.filter((res, index) => (res.value === evt.target.value ? (this.current = index) : (this.current = this.current)));
 			// this.next();
 			if (this.currentIndex === this.list.length) {
-				this.show = true
-				return
-			};
+				this.show = true;
+				return;
+			}
 		},
 		// 滑动页面选择
 		changeIndex(e) {
@@ -145,7 +147,6 @@ export default {
 		},
 		// 下一页
 		next() {
-			
 			this.currentIndex++;
 			this.setup();
 		},
@@ -261,13 +262,13 @@ uni-swiper {
 		border-radius: 50%;
 		transition: all 0.2s linear;
 	}
-	.close{
+	.close {
 		opacity: 0;
 		transform: translateY(40px);
 		width: 0;
 		height: 0;
 	}
-	.open{
+	.open {
 		opacity: 1;
 		transform: translateY(0px);
 	}
@@ -281,20 +282,20 @@ uni-swiper {
 		font-weight: bold;
 		color: rgba(17, 17, 17, 1);
 	}
-	.alert-dis{
-		font-size:22rpx;
+	.alert-dis {
+		font-size: 22rpx;
 		color: #666666;
-		.alert-time{
-			color: #FF2525;
-			font-weight:bold;
+		.alert-time {
+			color: #ff2525;
+			font-weight: bold;
 		}
 	}
-	.alert-btn{
+	.alert-btn {
 		margin-top: 46rpx;
 		margin-bottom: 40rpx;
-		box-shadow:0px 6px 10px 1px rgba(37,141,255,0.2);
+		box-shadow: 0px 6px 10px 1px rgba(37, 141, 255, 0.2);
 	}
-	.alert-img{
+	.alert-img {
 		width: 500rpx;
 		height: 346rpx;
 		margin: 80rpx 0;
