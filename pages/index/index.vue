@@ -2,7 +2,7 @@
 	<view class="content">
 		<view class="head"><view class="head-nav">测试题库</view></view>
 		<view class="center">
-			<image class="center-img" src="../../static/head.png" mode="widthFix"></image>
+			<image class="center-img" src="../../static/logo.png" mode="widthFix"></image>
 			<u-button
 				v-for="(item, index) in list"
 				:key="item.title"

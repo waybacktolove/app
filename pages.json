@@ -30,7 +30,20 @@
 			}
 		}, {
 			"path": "pages/result/result",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "测试结果"
+				// #ifdef APP-PLUS
+				,
+				"app-plus": {
+					"titleNView": {
+						"buttons": [{
+								"type": "share"
+							}
+						]
+					}
+				}
+				// #endif
+			}
 		}
 	],
 	"globalStyle": {

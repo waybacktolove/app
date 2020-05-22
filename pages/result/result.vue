@@ -1,10 +1,47 @@
 <template>
 	<view class="qiun-columns">
-		<view class="qiun-bg-white qiun-title-bar qiun-common-mt"><view class="qiun-title-dot-light">雷达图</view></view>
-		<view class="qiun-charts"><canvas canvas-id="canvasRadar" id="canvasRadar" class="charts" @touchstart="touchRadar"></canvas></view>
-		<view class="qiun-bg-white qiun-title-bar qiun-common-mt"><view class="qiun-title-dot-light">标准数据格式</view></view>
-		<view class="qiun-bg-white qiun-padding"><textarea class="qiun-textarea" auto-height="true" maxlength="-1" v-model="textarea" /></view>
-		<view class="qiun-charts"><canvas canvas-id="canvasColumn" id="canvasColumn" class="charts"></canvas></view>
+		<!-- <view><u-tabs-swiper ref="uTabs" :list="list" :current="current" @change="tabsChange" :is-scroll="false" swiperWidth="750"></u-tabs-swiper></view> -->
+		<u-sticky>
+			<!-- 只能有一个根元素 -->
+			<view class="sticky"><u-tabs :list="list" :is-scroll="false" :current="current" @change="change"></u-tabs></view>
+		</u-sticky>
+		<!-- MBIT -->
+		<view class="" v-show="current == 0">
+			<view class="qiun-bg-white qiun-title-bar qiun-common-mt">王小二的测试报告</view>
+			<view class="qiun-bg-white qiun-padding"><textarea class="qiun-textarea" auto-height="true" maxlength="-1" v-model="textarea" /></view>
+			<view class="qiun-charts"><canvas canvas-id="canvasColumn" id="canvasColumn" class="charts"></canvas></view>
+			<view class="top_bg" :class="scrollTop > 150 ? 'show' : 'hide'" @tap="goTop"><u-avatar :src="topImag" mode="square"></u-avatar></view>
+			<view class="" v-for="i in 50">{{ i }}</view>
+		</view>
+		<!-- 霍兰德 -->
+		<view class="" v-show="current == 1">
+			<!-- <u-empty text="暂无历史数据" mode="list"></u-empty> -->
+			<view class="qiun-charts"><canvas canvas-id="canvasRadar" id="canvasRadar" class="charts" @touchstart="touchRadar"></canvas></view>
+			<view class="" v-for="i in 50">{{ i }}</view>
+			<view class="top_bg" :class="scrollTop > 150 ? 'show' : 'hide'" @tap="goTop"><u-avatar :src="topImag" mode="square"></u-avatar></view>
+		</view>
+		
+		<!-- <view class="share"  @tap="goTop"><u-avatar :src="topImag" mode="square"></u-avatar></view> -->
+		<!-- 		<swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
+			<swiper-item class="swiper-item">
+				<scroll-view scroll-y :scroll-top="scrollTop" @scroll="scroll" style="height: 100%;width: 100%;">
+					<view class="">
+						<view class="qiun-charts"><canvas canvas-id="canvasRadar" id="canvasRadar" class="charts" @touchstart="touchRadar"></canvas></view>
+						<view class="" v-for="i in 50">{{ i }}</view>
+					</view>
+					<view class="top_bg" :class="scrollTop > 150 ? 'show' : 'hide'" @tap="goTop"><u-avatar :src="topImag" mode="square"></u-avatar></view>
+				</scroll-view>
+			</swiper-item>
+			<swiper-item class="swiper-item">
+				<scroll-view scroll-y style="height: 100%;width: 100%;">
+					<view class="">
+						<view class="qiun-bg-white qiun-title-bar qiun-common-mt"><view class="qiun-title-dot-light">标准数据格式</view></view>
+						<view class="qiun-bg-white qiun-padding"><textarea class="qiun-textarea" auto-height="true" maxlength="-1" v-model="textarea" /></view>
+						<view class="qiun-charts"><canvas canvas-id="canvasColumn" id="canvasColumn" class="charts"></canvas></view>
+					</view>
+				</scroll-view>
+			</swiper-item>
+		</swiper> -->
 	</view>
 </template>
 
@@ -17,71 +54,132 @@ var canvaColumn = null;
 export default {
 	data() {
 		return {
+			list: [
+				{
+					name: 'MBIT测试结果'
+				},
+				{
+					name: '霍兰德测试结果'
+				}
+			],
+			scrollTop: 0,
+			// 因为内部的滑动机制限制，请将tabs组件和swiper组件的current用不同变量赋值
+			current: 0, // tabs组件的current值，表示当前活动的tab选项
+			swiperCurrent: 0, // swipe
 			cWidth: '',
 			cHeight: '',
 			pixelRatio: 1,
 			textarea: '',
+			topImag: require('../../static/Bttop_icon.png'),
 			Radar: {
-				categories: ['维度1', '维度2', '维度3', '维度4', '维度5', '维度6'],
+				categories: ['E', 'I', 'S', 'N', 'T', 'F'],
 				series: [
 					{
-						name: '成交量2',
 						data: [190, 210, 105, 35, 27, 102]
 					}
 				]
 			},
 			ColumnB: {
-				categories: ['2013', '2014', '2015', '2016', '2017', '2018'],
+				categories: ['外向(E)', '内向(I)', '感觉(S)', '直觉(N)', '思考(T)', '情感(F)', '判断(J)', '知识(P)'],
 				series: [
 					{
-						name: '新成交量4',
-						data: [18, 27, 21, 24, 6, 28]
+						name: '',
+						data: [
+							{ value: 8, color: '' },
+							{ value: 2, color: '#01D1A0' },
+							{ value: 9, color: '' },
+							{ value: 1, color: '#01D1A0' },
+							{ value: 15, color: '' },
+							{ value: 2, color: '#01D1A0' },
+							{ value: 6, color: '' },
+							{ value: 6, color: '#01D1A0' }
+						]
 					}
 				]
 			}
 		};
 	},
-	onLoad() {
+	onLoad(e) {
 		_self = this;
-		//#ifdef MP-ALIPAY
-		uni.getSystemInfo({
-			success: function(res) {
-				if (res.pixelRatio > 1) {
-					//正常这里给2就行，如果pixelRatio=3性能会降低一点
-					//_self.pixelRatio =res.pixelRatio;
-					_self.pixelRatio = 2;
-				}
-			}
-		});
-		//#endif
+		_self.result_code = e.code || '';
+		_self.data_id = uni.getStorageSync('id');
 		this.cWidth = uni.upx2px(750);
 		this.cHeight = uni.upx2px(500);
 		this.getServerData();
 	},
+	// 导航栏按钮
+	onNavigationBarButtonTap(e) {
+		uni.share({
+		    provider: "weixin",
+		    scene: "WXSceneSession",
+		    type: 0,
+		    href: "http://uniapp.dcloud.io/",
+		    title: "DS测试分享",
+		    summary: "我正在使用DS测试MBIT，赶紧跟我一起来体验！",
+		    imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
+		    success: function (res) {
+		        console.log("success:" + JSON.stringify(res));
+		    },
+		    fail: function (err) {
+		        console.log("fail:" + JSON.stringify(err));
+				uni.showToast({
+					title:'分享失败',
+					icon:"none"
+				})
+		    }
+		});
+	},
+	onPageScroll(e) {
+		this.scrollTop = e.scrollTop;
+	},
 	methods: {
-		getServerData() {
-			uni.request({
-				url: 'https://www.ucharts.cn/data.json',
-				data: {},
-				success: function(res) {
-					console.log(res.data.data);
-					let Radar = { categories: [], series: [] };
-					Radar.categories = _self.Radar.categories;
-					Radar.series = _self.Radar.series;
-					_self.textarea = JSON.stringify(res.data.data.Radar);
-					_self.showRadar('canvasRadar', Radar);
-
-					let Column = { categories: [], series: [] };
-					//这里我后台返回的是数组，所以用等于，如果您后台返回的是单条数据，需要push进去
-					Column.categories = _self.ColumnB.categories;
-					Column.series = _self.ColumnB.series;
-					_self.textarea = JSON.stringify(res.data.data.ColumnB);
-					_self.showColumn('canvasColumn', Column);
-				},
-				fail: () => {
-					_self.tips = '网络错误，小程序端请检查合法域名';
-				}
+		change(index) {
+			this.current = index;
+			uni.pageScrollTo({
+				scrollTop: 0,
+				duration: 100
 			});
+		},
+		goTop() {
+			uni.pageScrollTo({
+				scrollTop: 0,
+				duration: 100
+			});
+		},
+		print() {
+			// window.print()
+		},
+		getServerData() {
+			this.$api.request('data/getResult','GET',{ result_code: this.result_code,data_id:this.data_id }, false, true, false).then(res=>{
+				let Radar = { categories: [], series: [] };
+				// let arr = []
+				// res.data.filter(o=>{
+				// 	arr.push()
+				// })
+				// _self.Radar.categories = 
+				Radar.categories = _self.Radar.categories;
+				Radar.series = _self.Radar.series;
+				// _self.textarea = JSON.stringify(res.data.data.Radar);
+				_self.showRadar('canvasRadar', Radar);
+				
+			})
+			// uni.request({
+			// 	url: 'https://www.ucharts.cn/data.json',
+			// 	data: {},
+			// 	success: function(res) {
+			// 		console.log(res.data.data);
+			
+			let Column = { categories: [], series: [] };
+			//这里我后台返回的是数组，所以用等于，如果您后台返回的是单条数据，需要push进去
+			Column.categories = _self.ColumnB.categories;
+			Column.series = _self.ColumnB.series;
+			// _self.textarea = JSON.stringify(res.data.data.ColumnB);
+			_self.showColumn('canvasColumn', Column);
+			// },
+			// fail: () => {
+			// 	_self.tips = '网络错误，小程序端请检查合法域名';
+			// }
+			// });
 		},
 		showRadar(canvasId, chartData) {
 			canvaRadar = new uCharts({
@@ -91,7 +189,7 @@ export default {
 				fontSize: 11,
 				padding: [15, 15, 0, 15],
 				legend: {
-					show: true,
+					show: false,
 					padding: 5,
 					lineHeight: 11,
 					margin: 0
@@ -124,14 +222,14 @@ export default {
 				$this: _self,
 				canvasId: canvasId,
 				type: 'column',
-				padding: [15, 5, 0, 15],
+				padding: [15, 15, 0, 15],
 				legend: {
-					show: true,
+					show: false,
 					padding: 5,
 					lineHeight: 11,
 					margin: 0
 				},
-				fontSize: 11,
+				fontSize: 10,
 				background: '#FFFFFF',
 				pixelRatio: _self.pixelRatio,
 				animation: true,
@@ -139,15 +237,28 @@ export default {
 				series: chartData.series,
 				xAxis: {
 					disableGrid: true
+					// axisLabel: {
+					// 	interval: 0,
+					// 	rotate: 40
+					// }
 				},
 				yAxis: {
+					// show: false,
+					// axisLabel: {
+					// 	//---坐标轴 标签
+					// 	show: true, //---是否显示
+					// 	inside: false, //---是否朝内
+					// 	rotate: 40, //---旋转角度
+					// 	margin: 8, //---刻度标签与轴线之间的距离
+					// 	color:'red',				//---默认取轴线的颜色
+					// },
 					data: [
 						{
 							position: 'right',
-							axisLine: false,
-							format: val => {
-								return val.toFixed(0) + '元';
-							}
+							axisLine: false
+							// format: val => {
+							// 	return 1;
+							// }
 						}
 					]
 				},
@@ -166,7 +277,11 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+uni-swiper {
+	height: auto;
+	margin-top: 20rpx;
+}
 /*样式的width和height一定要与定义的cWidth和cHeight相对应*/
 .qiun-charts {
 	width: 750upx;
@@ -178,5 +293,24 @@ export default {
 	width: 750upx;
 	height: 500upx;
 	background-color: #ffffff;
+}
+.top_bg {
+	position: fixed;
+	bottom: 300rpx;
+	right: 50rpx;
+	transition: all 0.3s linear;
+}
+.show {
+	width: 90rpx;
+	height: 90rpx;
+	opacity: 1;
+}
+.hide {
+	width: 0rpx;
+	height: 0rpx;
+	opacity: 0;
+}
+.share{
+	
 }
 </style>

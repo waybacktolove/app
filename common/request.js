@@ -71,8 +71,8 @@ const tui = {
 				url: tui.interfaceUrl() + url,
 				data: postData,
 				header: {
-					'content-type': isForm ? 'application/x-www-form-urlencoded' : 'application/json',
-					'HTTP_TOKEN': tui.getToken()
+					'Content-Type': isForm ? 'application/x-www-form-urlencoded' : 'application/json',
+					'token': tui.getToken()
 				},
 				method: method, //'GET','POST'
 				dataType: 'json',
