@@ -151,13 +151,11 @@ export default {
 		login(data) {
 			this.$api.request('user/register', 'POST', data, false, true, false).then(res => {
 				console.log(res.data.userinfo);
-				uni.setStorage({
-					key: 'userInfo',
-					data: res.data.userinfo,
-					success: function() {
-						console.log('保存用户信息成功');
-					}
-				});
+				try {
+				    uni.setStorageSync('userInfo', res.data.userinfo);
+				} catch (e) {
+					console.log('erroe'+e)
+				}
 				this.$goTo('/pages/mbit/mbit');
 			});
 		},

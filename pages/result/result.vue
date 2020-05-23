@@ -65,7 +65,6 @@ export default {
 			scrollTop: 0,
 			// 因为内部的滑动机制限制，请将tabs组件和swiper组件的current用不同变量赋值
 			current: 0, // tabs组件的current值，表示当前活动的tab选项
-			swiperCurrent: 0, // swipe
 			cWidth: '',
 			cHeight: '',
 			pixelRatio: 1,
@@ -103,6 +102,7 @@ export default {
 		_self = this;
 		_self.result_code = e.code || '';
 		_self.data_id = uni.getStorageSync('id');
+		_self.current = parseInt(_self.data_id)-1 
 		this.cWidth = uni.upx2px(750);
 		this.cHeight = uni.upx2px(500);
 		this.getServerData();
@@ -181,6 +181,7 @@ export default {
 			// }
 			// });
 		},
+		// 雷达图
 		showRadar(canvasId, chartData) {
 			canvaRadar = new uCharts({
 				$this: _self,
@@ -217,6 +218,7 @@ export default {
 			// 	}
 			// });
 		},
+		// 柱状图s
 		showColumn(canvasId, chartData) {
 			canvaColumn = new uCharts({
 				$this: _self,

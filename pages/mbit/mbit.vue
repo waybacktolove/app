@@ -98,7 +98,7 @@ export default {
 	},
 	onLoad() {
 		let id = uni.getStorageSync('id');
-		this.id = uni.getStorageSync('id');
+		this.id = id;
 		this.$api.request('data/title', 'GET', { id: id }, false, true, false).then(res => {
 			// console.log(res.data);
 			this.list = res.data;
